@@ -5,7 +5,7 @@ import path from 'node:path'
 import mime from 'mime-types';
 
 function FileCache() {
-	const fileCache = {}
+	const fileCache = new Map()
 	let staticFolder = ''
 
 	async function init(folder) {
@@ -36,12 +36,12 @@ function FileCache() {
 			const filePath = pathList[i]
 			const data = fileContentList[i]
 			const type = mimeTypeList[i]
-			fileCache[filePath] = { data: data, type: type }
+			fileCache.set(filePath, { data: data, type: type })
 		}
 	}
 
 	function get(file) {
-		return fileCache[file]
+		return fileCache.get(file)
 	}
 
 	function send(file, res) {
@@ -49,7 +49,7 @@ function FileCache() {
 		res.onAborted(() => {
 			res.aborted = true;
 		});
-		const fileData = fileCache[file]
+		const fileData = fileCache.get(file)
 		if (!res.aborted) {
 			res.cork(() => {
 				if (fileData) {
