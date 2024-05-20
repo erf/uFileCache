@@ -10,17 +10,16 @@ function FileCache() {
 	async function init(folder) {
 		staticFolder = folder
 		const files = await readdir(staticFolder)
+		const paths = files.map(file => path.join(staticFolder, file))
+		const mimeTypes = files.map(file => mime.lookup(file))
 		// read all files in parallel
-		const promises = files.map(file => {
-			const filePath = path.join(staticFolder, file)
-			return readFile(filePath)
-		})
+		const promises = paths.map(filePath => readFile(filePath))
 		const results = await Promise.all(promises)
 		// store the data in the cache with the mime type
 		for (let i = 0; i < files.length; i++) {
+			const filePath = paths[i]
 			const data = results[i]
-			const filePath = path.join(staticFolder, files[i])
-			const type = mime.lookup(filePath)
+			const type = mimeTypes[i]
 			fileCache[filePath] = { data: data.toString(), type: type }
 		}
 	}
