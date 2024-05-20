@@ -1,5 +1,6 @@
 import { readdir } from 'node:fs/promises';
 import { readFile } from 'node:fs/promises';
+import isBinaryPath from 'is-binary-path';
 import path from 'node:path'
 import mime from 'mime-types';
 
@@ -19,7 +20,10 @@ function FileCache() {
 		const pathList = files.map(file => path.join(staticFolder, file))
 		const mimeTypeList = files.map(file => mime.lookup(file))
 		// read all files in parallel
-		const promises = pathList.map(filePath => readFile(filePath))
+		const promises = pathList.map(filePath => {
+			const encoding = isBinaryPath(filePath) ? undefined : 'utf8'
+			return readFile(filePath, encoding)
+		})
 		let fileContentList
 		try {
 			fileContentList = await Promise.all(promises)
@@ -32,7 +36,7 @@ function FileCache() {
 			const filePath = pathList[i]
 			const data = fileContentList[i]
 			const type = mimeTypeList[i]
-			fileCache[filePath] = { data: data.toString(), type: type }
+			fileCache[filePath] = { data: data, type: type }
 		}
 	}
 

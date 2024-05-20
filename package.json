@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "dependencies": {
+    "is-binary-path": "^3.0.0",
     "mime-types": "^2.1.35"
   },
   "devDependencies": {
