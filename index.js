@@ -21,7 +21,7 @@ function FileCache() {
 		const mimeTypeList = files.map(file => mime.lookup(file))
 		// read all files in parallel
 		const promises = pathList.map(filePath => {
-			const encoding = isBinaryPath(filePath) ? 'binary' : 'utf8'
+			const encoding = isBinaryPath(filePath) ? undefined : 'utf8'
 			return readFile(filePath, encoding)
 		})
 		let fileContentList
