@@ -9,12 +9,24 @@ function FileCache() {
 
 	async function init(folder) {
 		staticFolder = folder
-		const files = await readdir(staticFolder)
+		let files
+		try {
+			files = await readdir(staticFolder)
+		} catch (err) {
+			console.error('Error reading static folder:', err)
+			return
+		}
 		const paths = files.map(file => path.join(staticFolder, file))
 		const mimeTypes = files.map(file => mime.lookup(file))
 		// read all files in parallel
 		const promises = paths.map(filePath => readFile(filePath))
-		const results = await Promise.all(promises)
+		let results
+		try {
+			results = await Promise.all(promises)
+		} catch (err) {
+			console.error('Error reading files:', err)
+			return
+		}
 		// store the data in the cache with the mime type
 		for (let i = 0; i < files.length; i++) {
 			const filePath = paths[i]
