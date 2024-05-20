@@ -28,6 +28,7 @@ import FileCache from 'uFileCache'
 
 const fileCache = new FileCache()
 
+// load files in folder to memory
 fileCache.init('public')
 
 // create a new app
