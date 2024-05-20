@@ -1,4 +1,5 @@
-import fs from 'node:fs'
+import { readdir } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
 import path from 'node:path'
 import mime from 'mime-types';
 
@@ -6,26 +7,22 @@ function FileCache() {
 	const fileCache = {}
 	let staticFolder = ''
 
-	function init(folder) {
+	async function init(folder) {
 		staticFolder = folder
-		fs.readdir(staticFolder, (err, files) => {
-			if (err) {
-				console.log(err)
-			} else {
-				files.forEach(file => {
-					const filePath = path.join(staticFolder, file)
-					console.log(filePath)
-					fs.readFile(filePath, (err, data) => {
-						if (err) {
-							console.log(err)
-						} else {
-							const type = mime.lookup(filePath)
-							fileCache[filePath] = { data: data, type: type }
-						}
-					})
-				})
-			}
+		const files = await readdir(staticFolder)
+		// read all files in parallel
+		const promises = files.map(file => {
+			const filePath = path.join(staticFolder, file)
+			return readFile(filePath)
 		})
+		const results = await Promise.all(promises)
+		// store the data in the cache with the mime type
+		for (let i = 0; i < files.length; i++) {
+			const data = results[i]
+			const filePath = path.join(staticFolder, files[i])
+			const type = mime.lookup(filePath)
+			fileCache[filePath] = { data: data.toString(), type: type }
+		}
 	}
 
 	function get(file) {
