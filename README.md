@@ -28,6 +28,8 @@ import FileCache from 'uFileCache'
 
 const fileCache = new FileCache()
 
+fileCache.init('public')
+
 // create a new app
 const app = uWS.App()
 
