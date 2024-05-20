@@ -51,7 +51,7 @@ function FileCache() {
 				if (fileData) {
 					res.writeStatus('200')
 					res.writeHeader('Content-Type', fileData.type)
-					res.end(fileData.data.toString())
+					res.end(fileData.data)
 				} else {
 					res.writeStatus('404')
 					res.end()
