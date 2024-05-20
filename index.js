@@ -16,22 +16,22 @@ function FileCache() {
 			console.error('Error reading static folder:', err)
 			return
 		}
-		const paths = files.map(file => path.join(staticFolder, file))
-		const mimeTypes = files.map(file => mime.lookup(file))
+		const pathList = files.map(file => path.join(staticFolder, file))
+		const mimeTypeList = files.map(file => mime.lookup(file))
 		// read all files in parallel
-		const promises = paths.map(filePath => readFile(filePath))
-		let results
+		const promises = pathList.map(filePath => readFile(filePath))
+		let fileContentList
 		try {
-			results = await Promise.all(promises)
+			fileContentList = await Promise.all(promises)
 		} catch (err) {
 			console.error('Error reading files:', err)
 			return
 		}
 		// store the data in the cache with the mime type
 		for (let i = 0; i < files.length; i++) {
-			const filePath = paths[i]
-			const data = results[i]
-			const type = mimeTypes[i]
+			const filePath = pathList[i]
+			const data = fileContentList[i]
+			const type = mimeTypeList[i]
 			fileCache[filePath] = { data: data.toString(), type: type }
 		}
 	}
