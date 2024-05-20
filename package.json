@@ -1,0 +1,24 @@
+{
+  "name": "ufilecache",
+  "version": "1.0.0",
+  "description": "minimal static file cache handler for uWebSocket.js",
+  "main": "index.js",
+  "type": "module",
+  "dependencies": {
+    "mime-types": "^2.1.35"
+  },
+  "devDependencies": {
+    "uWebSockets.js": "github:uNetworking/uWebSockets.js#v20.43.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/erf/uFileCache.git"
+  },
+  "keywords": [
+    "cache",
+    "filecache",
+    "static",
+    "uWebSocket",
+    "fileHandler"
+  ]
+}
