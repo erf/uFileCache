@@ -41,7 +41,7 @@ function FileCache() {
 	}
 
 	function send(file, res) {
-		console.log('send', file)
+		console.log('send ->', file)
 		res.onAborted(() => {
 			res.aborted = true;
 		});
