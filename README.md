@@ -40,3 +40,9 @@ app.get('/', (res, req) => fileCache.send('./public/index.html', res))
 // static files
 app.get('/*', (res, req) => fileCache.send(`./public${req.getUrl()}`, res))
 ```
+
+## Test
+
+```
+node --test --no-warnings=ExperimentalWarning
+```
